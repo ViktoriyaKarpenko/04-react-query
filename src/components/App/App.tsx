@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactPaginateImport from 'react-paginate';
 const ReactPaginate =
@@ -6,6 +6,7 @@ const ReactPaginate =
     .default ?? ReactPaginateImport;
 import css from './App.module.css';
 import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import MovieGrid from '../MovieGrid/MovieGrid';
 import MovieModal from '../MovieModal/MovieModal';
@@ -28,6 +29,12 @@ const App = () => {
 
   const movies = data?.movies ?? [];
   const totalPages = data?.totalPages ?? 0;
+
+  useEffect(() => {
+    if (data && movies.length === 0) {
+      toast('No movies found for your request.');
+    }
+  }, [data, movies.length]);
 
   const handleSubmit = (newQuery: string) => {
     setQuery(newQuery);
